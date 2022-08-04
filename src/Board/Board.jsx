@@ -14,8 +14,10 @@ export default function Board() {
     setGrid(gr);
   }, []);
 
-  function handleMouseDown(row,col){
-
+  function handleMouseDown(row, col) {
+    const newGrid = getNewGridWithWallToggled(grid, row, col);
+    setGrid(newGrid);
+    setMouseIsPressed(true);
   }
 
   return (
@@ -70,4 +72,15 @@ const createNode = (col, row) => {
     isWall: false,
     previousNode: null,
   };
+};
+
+const getNewGridWithWallToggled = (grid, row, col) => {
+  const newGrid = grid.slice();
+  const node = newGrid[row][col];
+  const newNode = {
+    ...node,
+    isWall: !node.isWall,
+  };
+  newGrid[row][col] = newNode;
+  return newGrid;
 };

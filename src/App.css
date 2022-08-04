@@ -55,3 +55,7 @@ body {
   box-shadow: 3px 5px 38px 4px rgba(240,161,240,1);
   margin-left: 15px;
 }
+
+.grid {
+  margin: 20px 0 0;
+}
