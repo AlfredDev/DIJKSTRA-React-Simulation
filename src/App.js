@@ -6,9 +6,9 @@ function App() {
     <div className="App">
       <div className="bubbles">
         <h1>DIJKSTRA ANIMATION</h1>
-        <div>
-          <Board></Board>
-        </div>
+      </div>
+      <div className="board">
+        <Board></Board>
       </div>
     </div>
   );

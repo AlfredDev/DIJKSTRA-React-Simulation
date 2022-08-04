@@ -24,7 +24,7 @@ function Node(props) {
   return (
     <div
       id={`node-${row}-${col}`}
-      className={`node-${extraClassName}`}
+      className={`node ${extraClassName}`}
       onMouseDown={() => onMouseDown(row, col)}
       onMouseEnter={() => onMouseEnter(row, col)}
       onMouseUp={() => onMouseUp()}

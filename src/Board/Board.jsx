@@ -5,7 +5,6 @@ const START_NODE_ROW = 10;
 const START_NODE_COL = 15;
 const FINISH_NODE_ROW = 10;
 const FINISH_NODE_COL = 35;
-
 export default function Board() {
   const [grid, setGrid] = useState([]);
   const [mouseIsPressed, setMouseIsPressed] = useState(false);
@@ -13,11 +12,37 @@ export default function Board() {
   useEffect(() => {
     const gr = getInitialGrid();
     setGrid(gr);
-  },[]);
+  }, []);
+
+  function handleMouseDown(row,col){
+
+  }
 
   return (
     <div>
-      <Node></Node>
+      <button>Init simulation</button>
+      <div className="grid">
+        {grid.map((row, i) => {
+          return (
+            <div key={i}>
+              {row.map((node, nodeIndex) => {
+                const { row, col, isFinish, isStart, isWall } = node;
+                return (
+                  <Node
+                    key={nodeIndex}
+                    col={col}
+                    isFinish={isFinish}
+                    isStart={isStart}
+                    isWall={isWall}
+                    row={row}
+                    onMouseDown={(row, col) => handleMouseDown(row, col)}
+                  />
+                );
+              })}
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }
@@ -27,7 +52,7 @@ const getInitialGrid = () => {
   for (let i = 0; i < 20; i++) {
     const currentRow = [];
     for (let j = 0; j < 50; j++) {
-      currentRow.push(createNode(i, j));
+      currentRow.push(createNode(j, i));
     }
     grid.push(currentRow);
   }
@@ -39,7 +64,7 @@ const createNode = (col, row) => {
     col,
     row,
     isStart: row === START_NODE_ROW && col === START_NODE_COL,
-    isFinish: row === FINISH_NODE_ROW && col === FINISH_NODE_ROW,
+    isFinish: row === FINISH_NODE_ROW && col === FINISH_NODE_COL,
     distance: Infinity,
     isVisited: false,
     isWall: false,
