@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
+import { dijkstra, getNodesIsShortestPathOrder } from "../model/Dijkstra";
 import Node from "./Node/Node";
+import './Board.css';
 
 const START_NODE_ROW = 10;
 const START_NODE_COL = 15;
@@ -20,9 +22,51 @@ export default function Board() {
     setMouseIsPressed(true);
   }
 
+  function visualizeDijktra() {
+    const grids = grid;
+    const startNode = grids[START_NODE_ROW][START_NODE_COL];
+    const finishNode = grids[FINISH_NODE_ROW][FINISH_NODE_COL];
+    const visitedNodesInOrder = dijkstra(grid, startNode, finishNode);
+    const nodesInShortestPathOrder = getNodesIsShortestPathOrder(finishNode);
+    animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder);
+  }
+
+  function animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder) {
+    for (let i = 0; i <= visitedNodesInOrder.length; i++) {
+      if (i === visitedNodesInOrder.length) {
+        setTimeout(() => {
+          animateShortestPath(nodesInShortestPathOrder);
+        }, 10 * i);
+        return;
+      }
+      setTimeout(() => {
+        const node = visitedNodesInOrder[i];
+        document.getElementById(`node-${node.row}-${node.col}`).className =
+          "node node-visited";
+      }, 10 * i);
+    }
+  }
+
+  function animateShortestPath(nodesInShortestPathOrder) {
+    for (let i = 0; i < nodesInShortestPathOrder.length; i++) {
+      setTimeout(() => {
+        const node = nodesInShortestPathOrder[i];
+        document.getElementById(`node-${node.row}-${node.col}`).className =
+          "node node-shortest-path";
+      }, 50 * i);
+    }
+  }
+
+  function handleMouseEnter(row, col) {
+    if (!mouseIsPressed) return;
+    const newGrid = getNewGridWithWallToggled(grid, row, col);
+    setGrid(newGrid);
+  }
+
   return (
     <div>
-      <button>Init simulation</button>
+      <button onClick={visualizeDijktra} >Init simulation</button>
+
       <div className="grid">
         {grid.map((row, i) => {
           return (
@@ -38,6 +82,7 @@ export default function Board() {
                     isWall={isWall}
                     row={row}
                     onMouseDown={(row, col) => handleMouseDown(row, col)}
+                    onMouseEnter={(row, col) => handleMouseEnter(row, col)}
                   />
                 );
               })}
